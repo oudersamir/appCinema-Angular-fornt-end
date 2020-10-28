@@ -1,0 +1,231 @@
+
+
+ <div class="container" style="height:150px;">
+  <div class="row pt-5">
+      <div class="col text-center">
+          <h2>Admin Dashboard</h2>
+      </div>
+  </div>
+</div>
+
+<div class="row ">
+ <div class="col-md-2">
+
+ </div>
+
+ <div class="col-md-9">
+  <ul class="nav justify-content-center grey lighten-4 py-4">
+
+    <li class="nav-item">
+        <a class="nav-link" routerLink="/admin"><h3 class="text-danger">Films</h3></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" routerLink="/contact"><h3 class="text-danger">Contacts</h3></a>
+    </li>
+   
+</ul>
+ </div>
+ 
+</div>
+
+<div class="row">
+  <div class="col-md-2">
+
+    <nav class="nav flex-column navbar-dark red lighten-3 py-4 mb-r font-weight-bold z-depth-1">
+      <a class="nav-link white-text" routerLink="">Cinemas</a>
+      <a class="nav-link white-text" routerLink="/contact">Contacts</a>
+     
+    </nav>
+
+  </div>
+
+  <div class="col-md-9">
+    
+
+    <div class="row">
+      <div class="col text-right">
+
+        <div class="float-right">
+          <button mdbBtn type="button" class="text-center" color="info"
+          data-toggle="modal" data-target="#basicExample"
+            
+           rounded="true" mdbWavesEffect  (click)="frame.show() ;getCategorie();">
+             <mdb-icon fas icon="plus"></mdb-icon>Add</button>
+        </div>
+      </div>
+      
+      
+        </div>
+    <table mdbTable>
+      <caption>List of films</caption>
+      <thead>
+        <tr>
+          <th *ngFor="let head of headElements" scope="col">{{head}} </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr mdbTableCol *ngFor="let film of elements">
+          <th scope="row"><img  style="width: 150px ; height:200px" class="img-fluid" src="{{filmService.host}}/imageFilm/{{film.id}}"></th>
+          <td>{{film.titre}}</td>
+          <td>{{film.duree}}</td>
+          <td>{{film.realisateur}}</td>
+          <td>{{film.categorie.name}}</td>
+          <td>{{film.description}}</td>
+
+          <td>
+
+            <div class="btn-group-vertical btn-group-sm" role="group" aria-label="Basic example">
+    <button mdbBtn type="button" color="warning" size="sm" class="waves-light"  
+    data-toggle="modal" data-target="#basicExample"      
+    rounded="true" mdbWavesEffect  (click)="frame.show() ;editFilm(film) "
+     mdbWavesEffect>Edit</button>
+    <button mdbBtn type="button" color="red" size="sm" class="waves-light" 
+    data-toggle="modal" data-target="#basicExample"
+       
+    rounded="true" mdbWavesEffect  
+    (click)="deleteFilm(film)" mdbWavesEffect>Delete</button>
+</div>
+          </td>
+
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+
+<div mdbModal  #frame="mdbModal" class="modal fade left" id="frameModalTop" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel" aria-hidden="true">
+     <form #f="ngForm" >
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header text-center">
+        <h4 class="modal-title w-100 font-weight-bold">{{formName}}</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="frame.hide()">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body mx-2">
+        <div class="md-form mb-5">
+          <input type="text" id="orangeForm-name" class="form-control" [formControl]="titre"
+                 mdbInput mdbValidate>
+          <label for="orangeForm-name">Titre    </label>
+          <mdb-error *ngIf="titre.invalid && (titre.dirty || titre.touched)">
+            Input invalid
+          </mdb-error>
+          <mdb-success *ngIf="titre.valid && (titre.dirty || titre.touched)">
+            Input valid
+          </mdb-success>
+        </div>
+
+        <div class="md-form mb-3">
+
+         <input class="form-control" type="date" name="date"value="{{date.value  |  date:'yyyy-MM-dd'}}" id="example-date-input"   [formControl]="date">
+          <label for="example-date-input" >Date  </label>
+
+        </div>
+        <div class="md-form mb-3">
+
+          <input class="form-control" type="text"  id="example-video-input"   [formControl]="videoUrl">
+           <label for="example-video-input" >video youtube</label>
+ 
+         </div>
+
+        <div class="md-form mb-3">
+          <input type="number" id="orangeForm-email" class="form-control" [formControl]="duree"
+                 mdbInput mdbValidate>
+          <label for="orangeForm-email">Durre</label>
+          <mdb-error
+            *ngIf="duree.invalid && (duree.dirty || duree.touched)">Input
+            invalid
+          </mdb-error>
+          <mdb-success
+            *ngIf="duree.valid && (duree.dirty || duree.touched)">Input
+            valid
+          </mdb-success>
+        </div>
+
+        <div class="md-form mb-3">
+          <input type="text" id="orangeForm-pass" class="form-control"  [formControl]="realisateur"
+                 mdbInput mdbValidate>
+          <label for="orangeForm-pass">realisateur</label>
+          <mdb-error
+            *ngIf="realisateur.invalid && (realisateur.dirty || realisateur.touched)">
+            Input invalid
+          </mdb-error>
+          <mdb-success
+            *ngIf="realisateur.valid && (realisateur.dirty || realisateur.touched)">
+            Input valid
+          </mdb-success>
+        </div>
+
+        <div class="md-form mb-4">
+          <select class="browser-default custom-select"  id="orangeForm-pass" class="form-control"  [formControl]="categorie"
+          mdbInput mdbValidate>
+            <option selected></option>
+            <option   *ngFor="let cat of categories" value="{{cat.id}}"  
+            [selected]="(categorie.value)? cat.id==categorie.value.id : false">{{cat.name}}</option>
+          
+          </select>
+          <label for="orangeForm-email">Categorie</label>
+          
+
+        </div>
+
+        <div class="md-form mb-5">
+          <div class="row">
+            <div class="col-md-8 ">
+              <form>
+                <div class="form-group">
+                    <fieldset class="form-group">
+  
+                        <label>Upload Logo</label>
+                        {{imageError}}
+                        <div class="custom-file fileInputProfileWrap">
+                            <input type="file"  [formControl]="file" (change)="fileChangeEvent($event)" class="fileInputProfile">
+                            <div class="img-space">
+  
+                                <ng-container *ngIf="isImageSaved; else elseTemplate">
+                                    <img [src]="cardImageBase64"  style="width: 150px ; height:200px"  />
+                                </ng-container>
+                                <ng-template #elseTemplate>
+  
+                                </ng-template>
+  
+                            </div>
+  
+                        </div>
+                    </fieldset>
+                </div>
+  
+                <a class="btn btn-danger" (click)="removeImage()" *ngIf="isImageSaved">Remove</a>
+            </form>
+            </div>
+            <div class="col-md-4">
+              <div class="row">
+                <textarea placeholder="description" [innerHTML]="description" 
+                 [formControl]="description" class="form-control"></textarea>
+              </div>
+              
+            </div>
+           
+          </div>
+          
+
+        </div>
+        
+        
+
+      </div>
+      <div class="modal-footer d-flex justify-content-center">
+        <button mdbBtn color="default" (click)="addFilm()"  [disabled]="!validatingForm.valid" 
+        class="waves-light" mdbWavesEffect>Save</button>
+      </div>
+    </div>
+  </div>
+  </form>
+
+</div>
+ 
+ 

@@ -1,0 +1,54 @@
+
+
+ <div class="container" style="height:150px;">
+  <div class="row pt-5">
+      <div class="col text-center">
+          <h2>Liste Contacts</h2>
+      </div>
+  </div>
+</div>
+
+<div class="row  ">
+ <div class="col-md-2">
+
+ </div>
+
+ <div class="col-md-9  ">
+  <ul class="nav justify-content-center grey lighten-4 py-4">
+
+    <li class="nav-item">
+        <a class="nav-link" routerLink="/admin"><h3 class="text-danger">Films</h3></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" routerLink="/contact"><h3 class="text-danger">Contacts</h3></a>
+    </li>
+   
+</ul>
+
+<!-- <ul class="list-group list-group-horizontal-lg">
+  <li class="list-group-item" ><a class="nav-link" routerLink="/admin"><h3 class="text-danger">Films</h3></a></li>
+  <li class="list-group-item">  <a class="nav-link" routerLink="/contact"><h3 class="text-danger">Contacts</h3></a></li>
+</ul> -->
+
+
+<table  class="mt-4" mdbTable>
+  <thead>
+    <tr>
+      <th *ngFor="let head of headElements" scope="col">{{head}} </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr mdbTableCol *ngFor="let el of elements">
+      <th scope="row">{{el.email}}</th>
+      <td>{{el.message}}</td>
+      <td>{{el.name}}</td>
+      <td>{{el.subject}}</td>
+    </tr>
+  </tbody>
+</table>
+ </div>
+
+
+
+ 
+</div>

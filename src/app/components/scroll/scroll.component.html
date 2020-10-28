@@ -1,0 +1,10 @@
+
+        <div mdbScrollSpy="scrollspy3" id="list-example" class="list-group">
+          <a mdbScrollSpyLink="list-item-1" class="list-group-item list-group-item-action "> <h4><strong>Villes</strong></h4></a>
+            <a mdbScrollSpyLink="list-item-1" class="list-group-item list-group-item-action   " 
+              (click)="onGetCinemas(ville)"  [ngClass]="ville==currentVille? ' list-group-item-warning':''"  *ngFor="let ville of villes">
+                {{ville.name}}</a>
+
+          
+        </div>
+        <!-- [routerLink]="['/cinemas/',ville.id]" -->

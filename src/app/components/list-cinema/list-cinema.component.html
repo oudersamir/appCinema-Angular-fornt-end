@@ -1,0 +1,185 @@
+
+   
+   <mdb-card>
+        <mdb-card-header><h4><strong>Liste des Cinemas</strong></h4>  </mdb-card-header>
+
+        <mdb-card-body>
+          <!-- Card -->
+          <div class="row">
+            <nav aria-label=" Page navigation example ">
+                <ul class=" center  pagination pg-amber pagination-lg border">
+              <!-- [routerLink]="['/cinemas/',cinema.id]" -->
+                  <li class="page-item"  [ngClass]="cinema==currentCinema? 'active':''" *ngFor="let cinema of cinemas">
+                    <a class="page-link "  (click)="onGetSalles(cinema)" mdbWavesEffect>{{cinema.name}}</a></li>
+                  
+                </ul>
+              </nav>
+          </div>
+          
+
+
+
+          <div class="row ">
+            <div  class="col-md-6"  *ngFor="let salle  of salles">
+          <mdb-card class="mb-3" borderColor="border-secondary" style="max-width: 30rem">
+              <mdb-card-header>{{salle.name}}</mdb-card-header>
+              <mdb-card-body>
+                         <div class="row">
+               
+               <div class="col-md-6">
+                <mdb-card height="100" *ngIf="salle.projections"> 
+                  <div class="view rgba-white-slight waves-light" mdbWavesEffect>
+                 
+                <mdb-card-img  style="width: 150px ; height:200px"    src="{{cinemaService.host}}/imageFilm/{{salle.projections[0].film.id}}"  alt="{{salle.name}}"></mdb-card-img>                
+                  <a>
+                      <div class="mask"></div>
+                  </a>
+                  </div>
+                  <mdb-card-body>
+                  <mdb-card-title>
+                      <h4>{{salle.projections[0].film.titre}}</h4>
+                  </mdb-card-title>
+              
+                  <mdb-card-text> 
+                  </mdb-card-text>
+              
+
+ <button type="button" mdbBtn color="success" class="waves-light" data-toggle="modal"
+  data-target="#basicExample" (click)="updateVideoUrl(salle.projections[0].film.videoUrl);  frame.show()"   mdbWavesEffect>show video</button>
+                  </mdb-card-body>
+              </mdb-card> 
+               </div>
+               <div class="col-md-6">
+                <ul class="list-group">
+                  <li class="list-group-item">Seances</li>
+                  <li class="list-group-item" 
+                   [ngClass]="seance==currentProjection? 'list-group-item-info':''"
+                  
+                  (click)="OnGetTicketsPlaces(seance,salle.id)" *ngFor="let seance of salle.projections ">
+                     Heure : {{seance.seance.heureDebut}} <br/>
+                     Prix  : {{seance.prix | currency:'MAD'}}
+                  </li>
+                 
+
+                </ul>
+               </div>
+               <div   *ngIf="currentSalle">
+                <div   *ngIf="currentSalle==salle.id">
+              <div class="row">
+                               <div class="col-md-12">
+                                <button (click)="reservePlace(num)"   placement="top"  mdbTooltip="not reserved"
+                          [disabled]="num.reserve" color="{{getClassButtonTicket(num)}}"
+                               mdbBtn type="button "  class="waves-light"  style="height: 50px; width: 90px;"   rounded="true"   mdbWavesEffect
+                           *ngFor="let num of placeNumbers"
+                          >{{num.place.numero     }}</button>
+                        
+                   </div>
+                    </div>
+                               <!-- Default form subscription -->
+                            <form   #f="ngForm" *ngIf="placesTicketsReserved.length>0" class="text-center border border-light p-5">
+
+                              <p class="h4 mb-4">Reservation</p>
+
+                              <!-- Name -->
+                              <input type="text"  required pattern="[a-zA-Z]+"  
+                               minlength="4" [ngClass]="{'is-invalid': nameClient.errors &&  nameClient.touched}"
+                              [(ngModel)]="ticket.nameClient" name="nameClient" #nameClient="ngModel"
+                              id="defaultSubscriptionFormPassword" class="form-control mb-4" placeholder="Name">
+                              <div  [hidden]="!nameClient.errors?.required && nameClient.touched  " class="alert alert-danger" >
+                                First name is required 
+                              </div>
+                              <div  [hidden]="!nameClient.errors?.minlength" class="alert alert-danger" >
+                                must be at least 2 chars !! 
+                              </div>
+                              <div  [hidden]="!nameClient.errors?.pattern" class="alert alert-danger">
+                                invalid format 
+
+                            </div>
+                              <!-- Email -->
+                              <input type="number" #codePayement="ngModel" required pattern="[0-9]+" [(ngModel)]="ticket.codePayement"  
+                              [ngClass]="{'is-invalid': !codePayement.valid && codePayement.touched }"
+                              name="codePayement" id="defaultSubscriptionFormEmail" class="form-control mb-4" placeholder="Code Payement">
+                              <div  *ngIf="codePayement.errors?.required"  class="alert alert-danger">
+                                code payement  is required
+                              </div>
+                              <div  *ngIf="codePayement.errors?.minlength"  class="alert alert-danger">
+                                must be at least 2 chars !!
+                              </div>
+                              <div  *ngIf="codePayement.errors?.pattern"  class="alert alert-danger">
+                               invalid format
+                              </div>
+
+                              <!-- Sign in button -->
+                              <button mdbBtn color="info" block="true"   [disabled]="!f.valid" (click)="reserve()" type="submit">reserver</button>
+                             
+                            
+                            </form>
+                           
+                                  <!-- Default form subscription -->
+                    <span  *ngIf="currentSalle==salle.id" class="align-middle">
+                      <a (click)="viderPlace()"  mdbBtn color="primary" ><i class="fa fa-chevron-circle-up" aria-hidden="true"></i>
+                      </a></span>
+                </div>
+                
+                
+                    
+               
+              
+              </div>
+             
+             </div>
+              </mdb-card-body>
+            </mdb-card>
+           
+              </div>
+        </div>
+  <!-- Card -->
+        </mdb-card-body>
+      </mdb-card>
+
+
+     
+      <div mdbModal #frame="mdbModal" class="modal fade" id="frameModalTop" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog modal-lg" role="document">
+      
+        <!--Content-->
+        <div class="modal-content">
+      
+          <!--Body-->
+          <div class="modal-body mb-0 p-0">
+            <div class="embed-responsive embed-responsive-16by9 z-depth-1-half">
+              <iframe class="embed-responsive-item" [src]="video" allowfullscreen></iframe>
+            </div>
+          </div>
+      
+          <!--Footer-->
+          <div class="modal-footer justify-content-center flex-column flex-md-row">
+            <span class="mr-4">Spread the word!</span>
+            <div>
+              <a type="button" mdbBtn floating="true" size="sm" mdbBtn color="fb" class="waves-light" mdbWavesEffect>
+                <mdb-icon fab icon="facebook-f"></mdb-icon>
+              </a>
+              <!--Twitter-->
+              <a type="button" mdbBtn floating="true" size="sm" mdbBtn color="tw" class="waves-light" mdbWavesEffect>
+                <mdb-icon fab icon="twitter"></mdb-icon>
+              </a>
+              <!--Google +-->
+              <a type="button" mdbBtn floating="true" size="sm" mdbBtn color="gplus" class="waves-light" mdbWavesEffect>
+                <mdb-icon fab icon="google-plus"></mdb-icon>
+              </a>
+              <!--Linkedin-->
+              <a type="button" mdbBtn floating="true" size="sm" mdbBtn color="ins" class="waves-light" mdbWavesEffect>
+                <mdb-icon fab icon="linkedin-in"></mdb-icon>
+              </a>
+            </div>
+            <button type="button" mdbBtn color="primary" outline="true" rounded="true" class="ml-4 waves-light" mdbWavesEffect data-dismiss="modal"
+              (click)="frame.hide()">Close</button>
+      
+          </div>
+      
+        </div>
+        <!--/.Content-->
+      
+      </div>
+      </div>
